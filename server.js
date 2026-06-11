@@ -104,8 +104,8 @@ async function processImage(base64Image) {
     const finalHeight = 3600;
     const bandHeight = 300;
 
-    // Logo XALDIGITAL, redimensionado para caber en la franja
-    const logoPath = path.join(__dirname, 'public', 'xaldigital.png');
+    // Logo XALDIGITAL blanco, redimensionado para caber en la franja
+    const logoPath = path.join(__dirname, 'public', 'xaldigital_white.png');
     const logoBuffer = await sharp(logoPath)
       .resize({ height: 180, width: 1600, fit: 'inside' })
       .png()
@@ -120,7 +120,7 @@ async function processImage(base64Image) {
       })
       .extend({
         bottom: bandHeight,
-        background: { r: 255, g: 255, b: 255, alpha: 1 }
+        background: { r: 4, g: 7, b: 15, alpha: 1 }
       })
       .png()
       .toBuffer();
