@@ -155,7 +155,7 @@
         }
         
         .camera-content {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15));
+            background: linear-gradient(135deg, rgba(255, 214, 0, 0.10), rgba(8, 12, 22, 0.75));
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 20px;
@@ -278,9 +278,9 @@
         .frame-option { position: relative; }
         .frame-option:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
         .frame-option.selected {
-            border-color: #10b981 !important;
+            border-color: #ffd700 !important;
             transform: scale(1.06) !important;
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45) !important;
+            box-shadow: 0 8px 24px rgba(255, 214, 0, 0.45) !important;
         }
         .frame-option.selected::after {
             content: '✓';
@@ -289,8 +289,8 @@
             right: -10px;
             width: 28px;
             height: 28px;
-            background: linear-gradient(135deg, #3b82f6, #10b981);
-            color: #fff;
+            background: linear-gradient(135deg, #ffe600, #ffc400);
+            color: #111;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -891,10 +891,10 @@
 
     <div class="container" id="inicioContainer" style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding-top:25vh; transition: opacity 0.3s;">
         <!-- Paso 1: Términos y condiciones -->
-        <div id="terms-section" style="display: block; position: relative; text-align: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); padding: 40px; border-radius: 20px; box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); min-width: 320px; margin-bottom: 30px;">
+        <div id="terms-section" style="display: block; position: relative; text-align: center; background: linear-gradient(135deg, rgba(255, 214, 0, 0.10), rgba(8, 12, 22, 0.75)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); padding: 40px; border-radius: 20px; box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); min-width: 320px; margin-bottom: 30px;">
             <h2 style="color: #ffffff; font-size: 1.5rem; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); font-weight: bold;">Términos y Condiciones</h2>
             <div class="terms-accept-container" style="display:flex;align-items:center;gap:10px;justify-content:center;margin:6px 0 2px 0; z-index: 1000;">
-                <input type="checkbox" id="termsCheckbox" style="width:20px;height:20px;accent-color:#059669;">
+                <input type="checkbox" id="termsCheckbox" style="width:20px;height:20px;accent-color:#ffd700;">
                 <label for="termsCheckbox" style="font-size:1.1rem;cursor:pointer;user-select:none;color:#ffffff; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
                     Aceptar <a href="#" id="openTermsModal" style="color:#ffffff;text-decoration:underline;font-weight:bold;text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Términos y Condiciones</a>
                 </label>
@@ -902,7 +902,7 @@
             <button id="btn-terms-next" style="background: linear-gradient(135deg, #ffe600, #ffc400); color: #111; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 18px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);" disabled>Continuar</button>
         </div>
         <!-- Paso 2: Nombre -->
-        <div id="name-first-section" style="display: none; position: relative; text-align: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); padding: 40px; border-radius: 20px; box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); min-width: 320px; margin-bottom: 30px;">
+        <div id="name-first-section" style="display: none; position: relative; text-align: center; background: linear-gradient(135deg, rgba(255, 214, 0, 0.10), rgba(8, 12, 22, 0.75)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); padding: 40px; border-radius: 20px; box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); min-width: 320px; margin-bottom: 30px;">
             <h2 style="color: #ffffff; font-size: 1.5rem; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); font-weight: bold;">Cuéntanos de ti</h2>
             <input type="text" id="user-name" placeholder="Nombre *" style="width: 300px; padding: 13px; border: 2px solid rgba(31, 41, 55, 0.3); border-radius: 25px; font-size: 1.05rem; text-align: center; margin-bottom: 12px; outline: none; background: rgba(255,255,255,0.9); color: #1f2937;">
             <br>
@@ -917,14 +917,14 @@
             <button id="btn-name-next" style="background: linear-gradient(135deg, #ffe600, #ffc400); color: #111; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 4px 15px rgba(255, 214, 0, 0.3); font-weight: bold;">Continuar</button>
         </div>
         <!-- Paso 3: Selección de Camiseta -->
-        <div id="shirt-section" style="display:none;flex-direction:column;align-items:center;position:relative;text-align:center;background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);padding:40px;border-radius:20px;box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);">
+        <div id="shirt-section" style="display:none;flex-direction:column;align-items:center;position:relative;text-align:center;background: linear-gradient(135deg, rgba(255, 214, 0, 0.10), rgba(8, 12, 22, 0.75)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);padding:40px;border-radius:20px;box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);">
             <h2 style="color: #ffffff; font-size: 1.5rem; margin-bottom: 30px; text-shadow: 0 1px 2px rgba(255,255,255,0.5); font-weight: bold;">Selecciona una camiseta</h2>
             <div class="shirts-grid" id="shirts-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:20px;max-width:800px;margin-bottom:20px;">
             </div>
             <button id="btn-shirt-next" style="background: linear-gradient(135deg, #ffe600, #ffc400); color: #111; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 20px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);" disabled>Continuar</button>
         </div>
         <!-- Paso 4: Selección de Marco Gamer (Nuevo) -->
-        <div id="frame-section" style="display:none;flex-direction:column;align-items:center;position:relative;text-align:center;background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);padding:40px;border-radius:20px;box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);">
+        <div id="frame-section" style="display:none;flex-direction:column;align-items:center;position:relative;text-align:center;background: linear-gradient(135deg, rgba(255, 214, 0, 0.10), rgba(8, 12, 22, 0.75)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);padding:40px;border-radius:20px;box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);">
             <h2 style="color: #ffffff; font-size: 1.5rem; margin-bottom: 30px; text-shadow: 0 1px 2px rgba(255,255,255,0.5); font-weight: bold;">Elige tu estilo de carta</h2>
             <div class="frame-options-container" id="frames-grid" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0;max-width:800px;">
                 <!-- Se llena con JS -->
@@ -1145,7 +1145,7 @@
         }
     </script>
     <div class="container" id="generatorContainer" style="display:none;">
-        <main class="main-content" style="position: relative; margin: 32px auto; text-align: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); padding: 20px; border-radius: 20px; box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); width: 90%; max-width: 500px; box-sizing: border-box;">
+        <main class="main-content" style="position: relative; margin: 32px auto; text-align: center; background: linear-gradient(135deg, rgba(255, 214, 0, 0.10), rgba(8, 12, 22, 0.75)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); padding: 20px; border-radius: 20px; box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); width: 90%; max-width: 500px; box-sizing: border-box;">
             <div class="upload-section">
                 <div class="card" style="background: transparent; box-shadow: none; padding: 0;">
                     
