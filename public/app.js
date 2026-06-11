@@ -15,8 +15,6 @@ const loadingOverlay = document.getElementById('loadingOverlay');
 const downloadBtn = document.getElementById('downloadBtn');
 const newBtn = document.getElementById('newBtn');
 const toast = document.getElementById('toast');
-const fileInput = document.getElementById('fileInput');
-const uploadBtn = document.getElementById('uploadBtn');
 const countdownEl = document.getElementById('countdown');
 
 let cameraStream = null;
@@ -25,8 +23,6 @@ let cameraStream = null;
 generateBtn.addEventListener('click', generateImage);
 downloadBtn.addEventListener('click', downloadImage);
 newBtn.addEventListener('click', resetForm);
-uploadBtn.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', handleFileUpload);
 cameraBtn.addEventListener('click', async () => {
     cameraModal.style.display = 'block';
     
@@ -80,20 +76,6 @@ function checkFormValid() {
     generateBtn.disabled = !hasImage;
 }
 
-// Manejar subida de archivo desde galería
-function handleFileUpload(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            imagePreview.src = e.target.result;
-            previewContainer.style.display = 'block';
-            checkFormValid();
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
 // Iniciar cuenta regresiva
 function startCountdown() {
     let count = 3;
@@ -112,7 +94,7 @@ function startCountdown() {
     }, 1000);
 }
 
-// Actualiza el preview y validación al capturar imagen
+// Captura la imagen y genera directamente (sin mostrar la foto original)
 function captureImage() {
     const canvas = document.createElement('canvas');
     canvas.width = cameraVideo.videoWidth;
@@ -121,14 +103,14 @@ function captureImage() {
     ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
     const dataUrl = canvas.toDataURL('image/png');
     imagePreview.src = dataUrl;
-    previewContainer.style.display = 'block';
+    previewContainer.style.display = 'none';
     cameraModal.style.display = 'none';
     if (cameraStream) {
         cameraStream.getTracks().forEach(track => track.stop());
         cameraStream = null;
     }
-    // Asegura que se valide el formulario después de capturar
-    checkFormValid();
+    // Generar automáticamente: el usuario solo ve la imagen creada por la IA
+    generateImage();
 }
 
 // Quitar imagen capturada
@@ -201,6 +183,7 @@ no caricatura, no anime.`;
         }
 
         resultImage.src = data.image;
+        document.querySelector('.upload-section').style.display = 'none';
         resultSection.style.display = 'block';
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         showToast('¡Imagen generada exitosamente! 🎉', 'success');
@@ -272,9 +255,9 @@ function downloadImage() {
 function resetForm() {
     imagePreview.src = '';
     promptInput.value = '';
-    fileInput.value = ''; // Limpiar input file
     previewContainer.style.display = 'none';
     resultSection.style.display = 'none';
+    document.querySelector('.upload-section').style.display = 'block';
     generateBtn.disabled = true;
     
     // Limpiar QR
