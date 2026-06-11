@@ -164,6 +164,14 @@ no caricatura, no anime.`;
         formData.append('image', file);
         formData.append('prompt', prompt);
 
+        // Datos del participante (captura de leads del evento)
+        const datos = window.datosUsuario || {};
+        formData.append('nombre', datos.nombre || nombre);
+        formData.append('empresa', datos.empresa || '');
+        formData.append('puesto', datos.puesto || '');
+        formData.append('telefono', datos.telefono || '');
+        formData.append('ciudad', datos.ciudad || '');
+
         const response = await fetch('/api/generate', {
             method: 'POST',
             body: formData

@@ -142,6 +142,37 @@ async function processImage(base64Image) {
   }
 }
 
+// Guardar datos del participante (leads del evento) en CSV
+function saveLead({ nombre, empresa, puesto, telefono, ciudad }) {
+  try {
+    if (!nombre) return;
+    const leadsPath = path.join(__dirname, 'leads.csv');
+    if (!fs.existsSync(leadsPath)) {
+      fs.writeFileSync(leadsPath, '﻿fecha,nombre,empresa,puesto,telefono,ciudad\n');
+    }
+    const clean = v => `"${String(v || '').replace(/"/g, '""')}"`;
+    const fecha = new Date().toISOString();
+    const row = [fecha, nombre, empresa, puesto, telefono, ciudad].map(clean).join(',') + '\n';
+    fs.appendFileSync(leadsPath, row);
+    console.log('Lead guardado:', nombre, '-', empresa);
+  } catch (error) {
+    console.error('Error guardando lead:', error);
+  }
+}
+
+// Descargar leads (protegido con LEADS_KEY del .env)
+app.get('/api/leads', (req, res) => {
+  const key = process.env.LEADS_KEY;
+  if (!key || req.query.key !== key) {
+    return res.status(403).json({ error: 'No autorizado' });
+  }
+  const leadsPath = path.join(__dirname, 'leads.csv');
+  if (!fs.existsSync(leadsPath)) {
+    return res.status(404).json({ error: 'Aún no hay registros' });
+  }
+  res.download(leadsPath, 'leads_xaldigital.csv');
+});
+
 // Ruta principal
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -150,8 +181,8 @@ app.get('/', (req, res) => {
 // Endpoint para generar imagen
 app.post('/api/generate', upload.single('image'), async (req, res) => {
   try {
-    const { prompt } = req.body;
-    
+    const { prompt, nombre, empresa, puesto, telefono, ciudad } = req.body;
+
     if (!prompt) {
       return res.status(400).json({ error: 'El prompt es requerido' });
     }
@@ -159,6 +190,9 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'La imagen es requerida' });
     }
+
+    // Registrar datos del participante (actividad Identidad Digital)
+    saveLead({ nombre, empresa, puesto, telefono, ciudad });
 
     // Leer la imagen del usuario
     const imagePath = req.file.path;

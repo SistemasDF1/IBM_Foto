@@ -14,10 +14,19 @@
         * {
             font-family: 'Everett', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+        /* Fondo XALDIGITAL: azul muy oscuro con resplandor amarillo sutil */
+        body {
+            background:
+                radial-gradient(ellipse at 80% 10%, rgba(255, 214, 0, 0.08), transparent 50%),
+                radial-gradient(ellipse at 15% 85%, rgba(255, 214, 0, 0.05), transparent 45%),
+                linear-gradient(160deg, #060a14 0%, #04070f 60%, #02040a 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
         /* Estilos para botón de cámara */
         .camera-btn {
-            background: linear-gradient(135deg, #e55319 0%, #e55319 100%);
-            color: white;
+            background: linear-gradient(135deg, #ffe600 0%, #ffc400 100%);
+            color: #111;
             border: none;
             padding: 16px 32px;
             border-radius: 50px;
@@ -38,8 +47,8 @@
         
         .camera-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
-            background: #194875;
+            box-shadow: 0 12px 35px rgba(255, 214, 0, 0.4);
+            background: #ffd700;
         }
         
         .camera-btn:active {
@@ -171,8 +180,8 @@
         }
         
         #captureBtn, #closeCameraBtn {
-            background: #e55319;
-            color: white;
+            background: #ffd700;
+            color: #111;
             border: none;
             padding: 12px 24px;
             border-radius: 25px;
@@ -183,7 +192,7 @@
         }
         
         #captureBtn:hover, #closeCameraBtn:hover {
-            background: #194875;
+            background: #ffe600;
             transform: translateY(-2px);
         }
         
@@ -210,11 +219,11 @@
 }
 
 .loader::before {
- background-color: #e55319;
+ background-color: #ffd700;
 }
 
 .loader::after {
- background-color: #194875;
+ background-color: #1a1a1a;
  animation-delay: .5s;
 }
 
@@ -817,13 +826,10 @@
                         Si usted no está de acuerdo con estos Términos y Condiciones, por favor absténgase de participar en esta experiencia fotográfica.
                     </li>
                 </ol>
-                <button id="closeTermsModal" style="margin-top:18px;padding:10px 28px;font-size:1.1rem;background: linear-gradient(135deg, #3b82f6, #10b981);color:#ffffff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">Cerrar</button>
+                <button id="closeTermsModal" style="margin-top:18px;padding:10px 28px;font-size:1.1rem;background: linear-gradient(135deg, #ffe600, #ffc400);color:#111;border:none;border-radius:8px;cursor:pointer;font-weight:bold;box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">Cerrar</button>
             </div>
         </div>
 
-    <video autoplay muted loop class="video-background">
-        <source src="img/fondo3.mp4" type="video/mp4">
-    </video>
 
     <div class="logo-corner">
         <img class="logo-light" src="xaldigital.png" alt="XALDIGITAL">
@@ -841,21 +847,29 @@
                     Aceptar <a href="#" id="openTermsModal" style="color:#ffffff;text-decoration:underline;font-weight:bold;text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Términos y Condiciones</a>
                 </label>
             </div>
-            <button id="btn-terms-next" style="background: linear-gradient(135deg, #3b82f6, #10b981); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 18px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);" disabled>Continuar</button>
+            <button id="btn-terms-next" style="background: linear-gradient(135deg, #ffe600, #ffc400); color: #111; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 18px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);" disabled>Continuar</button>
         </div>
         <!-- Paso 2: Nombre -->
         <div id="name-first-section" style="display: none; position: relative; text-align: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); padding: 40px; border-radius: 20px; box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); min-width: 320px; margin-bottom: 30px;">
-            <h2 style="color: #ffffff; font-size: 1.5rem; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); font-weight: bold;">¿Cuál es tu nombre?</h2>
-            <input type="text" id="user-name" placeholder="Escribe tu nombre aquí" style="width: 300px; padding: 15px; border: 2px solid rgba(31, 41, 55, 0.3); border-radius: 25px; font-size: 1.2rem; text-align: center; margin-bottom: 20px; outline: none; transition: border-color 0.3s ease; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); color: #1f2937;" onfocus="this.style.borderColor='#1f2937'" onblur="this.style.borderColor='rgba(31, 41, 55, 0.3)'">
+            <h2 style="color: #ffffff; font-size: 1.5rem; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); font-weight: bold;">Cuéntanos de ti</h2>
+            <input type="text" id="user-name" placeholder="Nombre *" style="width: 300px; padding: 13px; border: 2px solid rgba(31, 41, 55, 0.3); border-radius: 25px; font-size: 1.05rem; text-align: center; margin-bottom: 12px; outline: none; background: rgba(255,255,255,0.9); color: #1f2937;">
             <br>
-            <button id="btn-name-next" style="background: linear-gradient(135deg, #3b82f6, #10b981); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">Continuar</button>
+            <input type="text" id="user-empresa" placeholder="Empresa *" style="width: 300px; padding: 13px; border: 2px solid rgba(31, 41, 55, 0.3); border-radius: 25px; font-size: 1.05rem; text-align: center; margin-bottom: 12px; outline: none; background: rgba(255,255,255,0.9); color: #1f2937;">
+            <br>
+            <input type="text" id="user-puesto" placeholder="Puesto *" style="width: 300px; padding: 13px; border: 2px solid rgba(31, 41, 55, 0.3); border-radius: 25px; font-size: 1.05rem; text-align: center; margin-bottom: 12px; outline: none; background: rgba(255,255,255,0.9); color: #1f2937;">
+            <br>
+            <input type="tel" id="user-telefono" placeholder="Teléfono *" style="width: 300px; padding: 13px; border: 2px solid rgba(31, 41, 55, 0.3); border-radius: 25px; font-size: 1.05rem; text-align: center; margin-bottom: 12px; outline: none; background: rgba(255,255,255,0.9); color: #1f2937;">
+            <br>
+            <input type="text" id="user-ciudad" placeholder="Ciudad *" style="width: 300px; padding: 13px; border: 2px solid rgba(31, 41, 55, 0.3); border-radius: 25px; font-size: 1.05rem; text-align: center; margin-bottom: 12px; outline: none; background: rgba(255,255,255,0.9); color: #1f2937;">
+            <br>
+            <button id="btn-name-next" style="background: linear-gradient(135deg, #ffe600, #ffc400); color: #111; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 4px 15px rgba(255, 214, 0, 0.3); font-weight: bold;">Continuar</button>
         </div>
         <!-- Paso 3: Selección de Camiseta -->
         <div id="shirt-section" style="display:none;flex-direction:column;align-items:center;position:relative;text-align:center;background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);padding:40px;border-radius:20px;box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);">
             <h2 style="color: #ffffff; font-size: 1.5rem; margin-bottom: 30px; text-shadow: 0 1px 2px rgba(255,255,255,0.5); font-weight: bold;">Selecciona una camiseta</h2>
             <div class="shirts-grid" id="shirts-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));gap:20px;max-width:800px;margin-bottom:20px;">
             </div>
-            <button id="btn-shirt-next" style="background: linear-gradient(135deg, #3b82f6, #10b981); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 20px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);" disabled>Continuar</button>
+            <button id="btn-shirt-next" style="background: linear-gradient(135deg, #ffe600, #ffc400); color: #111; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 20px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);" disabled>Continuar</button>
         </div>
         <!-- Paso 4: Selección de Marco Gamer (Nuevo) -->
         <div id="frame-section" style="display:none;flex-direction:column;align-items:center;position:relative;text-align:center;background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);padding:40px;border-radius:20px;box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);">
@@ -863,7 +877,7 @@
             <div class="frame-options-container" id="frames-grid" style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0;max-width:800px;">
                 <!-- Se llena con JS -->
             </div>
-            <button id="btn-frame-next" style="background: linear-gradient(135deg, #3b82f6, #10b981); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 20px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);" disabled>Continuar</button>
+            <button id="btn-frame-next" style="background: linear-gradient(135deg, #ffe600, #ffc400); color: #111; border: none; padding: 12px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; margin-top: 20px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);" disabled>Continuar</button>
         </div>
     </div>
     <script>
@@ -1035,14 +1049,19 @@
                     document.getElementById('name-first-section').style.display = 'block';
                 }
             });
-            // Paso 2: Nombre -> directo a la cámara (XALDIGITAL no usa camisetas ni cartas)
+            // Paso 2: Datos del participante -> directo a la cámara
             document.getElementById('btn-name-next').addEventListener('click', function() {
                 var nombre = document.getElementById('user-name').value.trim();
-                if (!nombre) {
-                    alert('Por favor, ingresa tu nombre');
+                var empresa = document.getElementById('user-empresa').value.trim();
+                var puesto = document.getElementById('user-puesto').value.trim();
+                var telefono = document.getElementById('user-telefono').value.trim();
+                var ciudad = document.getElementById('user-ciudad').value.trim();
+                if (!nombre || !empresa || !puesto || !telefono || !ciudad) {
+                    alert('Por favor, completa todos los campos');
                     return;
                 }
                 window.nombreUsuario = nombre;
+                window.datosUsuario = { nombre: nombre, empresa: empresa, puesto: puesto, telefono: telefono, ciudad: ciudad };
                 document.getElementById('name-first-section').style.display = 'none';
                 document.getElementById('inicioContainer').style.display = 'none';
                 document.getElementById('generatorContainer').style.display = 'block';
@@ -1175,6 +1194,11 @@
 
             // Limpiar campos
             document.getElementById('user-name').value = '';
+            document.getElementById('user-empresa').value = '';
+            document.getElementById('user-puesto').value = '';
+            document.getElementById('user-telefono').value = '';
+            document.getElementById('user-ciudad').value = '';
+            window.datosUsuario = null;
             document.getElementById('imagePreview').src = '';
             document.getElementById('previewContainer').style.display = 'none';
 

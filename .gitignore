@@ -31,3 +31,6 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/
+
+# Datos de participantes
+leads.csv
