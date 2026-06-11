@@ -129,34 +129,28 @@ async function generateImage() {
         return;
     }
 
-    // Construir el prompt con los datos de camiseta y nombre
+    // Construir el prompt estilo XALDIGITAL (retrato de código binario)
     const nombre = window.nombreUsuario || 'Usuario';
-    const camiseta = window.camisetaSeleccionada;
-    const nombreCamiseta = camiseta ? camiseta.name : 'la seleccionada';
-    const estiloMarco = window.marcoSeleccionado || 'verde y dorado';
-    
+
     const prompt = `Usa la foto que acabo de tomar como base principal.
-Mantén mi identidad facial realista y reconocible.
+Mantén mi identidad facial realista y reconocible (ojos, rasgos, cabello, vello facial).
 
-Cambia la ropa por la camiseta de fútbol de ${nombreCamiseta}.
-Pon la camiseta de ${nombreCamiseta} con sus colores característicos,
-diseño auténtico y escudo del país.
-IMPORTANTE: la camiseta NO debe tener logos de patrocinadores,
-ni marcas deportivas (Nike, Adidas, Puma, etc.), ni publicidad de ninguna marca comercial.
-Solo los colores del país y su escudo, sin ningún logo comercial.
+Crea un retrato digital artístico tipo póster:
+el rostro debe estar formado por código binario brillante (números 1 y 0)
+y caracteres de datos pequeños en color dorado/amarillo luminoso,
+siguiendo los contornos y volúmenes reales de la cara.
+Los ojos deben permanecer realistas y visibles a través del código.
 
-Crea una carta de jugador de fútbol estilo FIFA Ultimate Team,
-diseño premium y profesional.
+Un lado del rostro se desintegra y disuelve en partículas
+de datos y dígitos que flotan hacia el borde de la imagen.
 
-Agrega un marco tipo carta ${estiloMarco},
-valoración del jugador en la parte superior,
-nombre (${nombre}) y posición debajo.
+Fondo azul muy oscuro casi negro, con sutiles columnas de
+código cayendo estilo matrix, iluminación cinematográfica.
 
-Incluye la bandera de ${nombreCamiseta} en algún lugar visible de la carta.
+En la parte inferior escribe el nombre "${nombre}"
+en tipografía futurista digital color amarillo neón brillante.
 
-Fondo de estadio con iluminación cinematográfica,
-estilo póster deportivo realista,
-alta calidad, ultra detallado,
+Estilo póster tecnológico premium, alta calidad, ultra detallado,
 no caricatura, no anime.`;
 
     promptInput.value = prompt;
@@ -188,30 +182,16 @@ no caricatura, no anime.`;
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         showToast('¡Imagen generada exitosamente! 🎉', 'success');
         
-        // Lanzar celebración de fútbol
+        // Lanzar celebración con colores XALDIGITAL (amarillo/dorado)
         if (window.confetti) {
-            // 1. Lluvia de balones de fútbol
-            const scalar = 4;
-            const soccer = confetti.shapeFromText({ text: '⚽', scalar });
-            
             window.confetti({
-                particleCount: 30,
-                spread: 100,
+                particleCount: 120,
+                spread: 80,
                 origin: { y: 0.6 },
-                shapes: [soccer],
-                scalar: scalar,
-                gravity: 0.7,
-                ticks: 300 // Duran más tiempo en pantalla
-            });
-
-            // 2. Confeti complementario (Oro, Blanco, Negro)
-            window.confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#FFD700', '#FFFFFF', '#000000'], // Colores premium
-                shapes: ['circle'],
-                gravity: 0.6
+                colors: ['#FFD700', '#FFE600', '#FFFFFF', '#000000'],
+                shapes: ['circle', 'square'],
+                gravity: 0.6,
+                ticks: 300
             });
         }
         
@@ -241,7 +221,7 @@ function downloadImage() {
     const minuto = String(fecha.getMinutes()).padStart(2, '0');
     const segundo = String(fecha.getSeconds()).padStart(2, '0');
     const nombreLimpio = nombre.replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ]/g, '_');
-    const nombreArchivo = `CartaFIFA_${nombreLimpio}_${dia}-${mes}-${año}_${hora}-${minuto}-${segundo}.png`;
+    const nombreArchivo = `XALDIGITAL_${nombreLimpio}_${dia}-${mes}-${año}_${hora}-${minuto}-${segundo}.png`;
     
     const link = document.createElement('a');
     link.href = resultImage.src;

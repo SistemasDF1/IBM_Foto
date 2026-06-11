@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Development Factor - Generador de Imágenes</title>
+    <title>XALDIGITAL - Generador de Imágenes</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Everett:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1035,7 +1035,7 @@
                     document.getElementById('name-first-section').style.display = 'block';
                 }
             });
-            // Paso 2: Nombre
+            // Paso 2: Nombre -> directo a la cámara (XALDIGITAL no usa camisetas ni cartas)
             document.getElementById('btn-name-next').addEventListener('click', function() {
                 var nombre = document.getElementById('user-name').value.trim();
                 if (!nombre) {
@@ -1044,8 +1044,9 @@
                 }
                 window.nombreUsuario = nombre;
                 document.getElementById('name-first-section').style.display = 'none';
-                document.getElementById('shirt-section').style.display = 'block';
-                cargarCamisetas();
+                document.getElementById('inicioContainer').style.display = 'none';
+                document.getElementById('generatorContainer').style.display = 'block';
+                abrirCamaraAutomatica();
             });
             // Paso 3: Camiseta
             document.getElementById('btn-shirt-next').addEventListener('click', function() {
