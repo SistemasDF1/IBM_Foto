@@ -157,8 +157,11 @@ async function generateImage() {
 Mantén mi identidad facial realista y reconocible.
 
 Cambia la ropa por la camiseta de fútbol de ${nombreCamiseta}.
-Pon exactamente la camiseta oficial de ${nombreCamiseta} con sus colores característicos,
+Pon la camiseta de ${nombreCamiseta} con sus colores característicos,
 diseño auténtico y escudo del país.
+IMPORTANTE: la camiseta NO debe tener logos de patrocinadores,
+ni marcas deportivas (Nike, Adidas, Puma, etc.), ni publicidad de ninguna marca comercial.
+Solo los colores del país y su escudo, sin ningún logo comercial.
 
 Crea una carta de jugador de fútbol estilo FIFA Ultimate Team,
 diseño premium y profesional.
