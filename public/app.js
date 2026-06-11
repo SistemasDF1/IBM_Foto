@@ -147,9 +147,6 @@ de datos y dígitos que flotan hacia el borde de la imagen.
 Fondo azul muy oscuro casi negro, con sutiles columnas de
 código cayendo estilo matrix, iluminación cinematográfica.
 
-En la parte inferior escribe el nombre "${nombre}"
-en tipografía futurista digital color amarillo neón brillante.
-
 Estilo póster tecnológico premium, alta calidad, ultra detallado,
 no caricatura, no anime.`;
 

@@ -1098,7 +1098,9 @@
             btnTermsNext.addEventListener('click', function() {
                 if (termsCheckbox.checked) {
                     document.getElementById('terms-section').style.display = 'none';
-                    document.getElementById('name-first-section').style.display = 'block';
+                    document.getElementById('inicioContainer').style.display = 'none';
+                    document.getElementById('generatorContainer').style.display = 'block';
+                    abrirCamaraAutomatica();
                 }
             });
             // Paso 2: Datos del participante -> directo a la cámara
