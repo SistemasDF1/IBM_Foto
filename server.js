@@ -98,30 +98,43 @@ async function cleanOldFiles() {
 async function processImage(base64Image) {
   try {
     const imageBuffer = Buffer.from(base64Image, 'base64');
-    // const watermarkPath = path.join(__dirname, 'public', 'img', 'Kyndryl_pie.png');
-    
-    // Procesar imagen principal
-    const processedImage = await sharp(imageBuffer)
-      .resize(2400, 3600, {
+
+    // Dimensiones finales: 2400x3600 (imagen 3300 + franja blanca 300)
+    const finalWidth = 2400;
+    const finalHeight = 3600;
+    const bandHeight = 300;
+
+    // Logo azul de Ingram, redimensionado para caber en la franja
+    const logoPath = path.join(__dirname, 'public', 'Ingram.png');
+    const logoBuffer = await sharp(logoPath)
+      .resize({ height: 180, width: 1600, fit: 'inside' })
+      .png()
+      .toBuffer();
+    const logoMeta = await sharp(logoBuffer).metadata();
+
+    // Imagen principal + franja blanca inferior
+    const baseImage = await sharp(imageBuffer)
+      .resize(finalWidth, finalHeight - bandHeight, {
         fit: 'cover',
         position: 'center'
       })
+      .extend({
+        bottom: bandHeight,
+        background: { r: 255, g: 255, b: 255, alpha: 1 }
+      })
       .png()
       .toBuffer();
-    
-    // Obtener dimensiones de la marca de agua
-    // const watermarkInfo = await sharp(watermarkPath).metadata();
-    
-    // Combinar imagen con marca de agua en la parte inferior
-    // const finalImage = await sharp(processedImage)
-    //   .composite([{
-    //     input: watermarkPath,
-    //     gravity: 'south'
-    //   }])
-    //   .png()
-    //   .toBuffer();
-    
-    // return finalImage.toString('base64');
+
+    // Logo centrado dentro de la franja
+    const processedImage = await sharp(baseImage)
+      .composite([{
+        input: logoBuffer,
+        top: Math.round((finalHeight - bandHeight) + (bandHeight - logoMeta.height) / 2),
+        left: Math.round((finalWidth - logoMeta.width) / 2)
+      }])
+      .png()
+      .toBuffer();
+
     return processedImage.toString('base64');
   } catch (error) {
     console.error('Error procesando imagen:', error);
