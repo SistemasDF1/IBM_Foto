@@ -104,8 +104,8 @@ async function processImage(base64Image) {
     const finalHeight = 3600;
     const bandHeight = 300;
 
-    // Logo azul de Ingram, redimensionado para caber en la franja
-    const logoPath = path.join(__dirname, 'public', 'Ingram.png');
+    // Logo XALDIGITAL, redimensionado para caber en la franja
+    const logoPath = path.join(__dirname, 'public', 'xaldigital.png');
     const logoBuffer = await sharp(logoPath)
       .resize({ height: 180, width: 1600, fit: 'inside' })
       .png()
@@ -181,7 +181,7 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
       }
     ];
 
-    console.log('Generando carta de jugador de fútbol con Gemini 2.5...');
+    console.log('Generando retrato digital XALDIGITAL con Gemini 2.5...');
     
     // Generar la imagen
     const result = await model.generateContent(parts);
@@ -266,7 +266,7 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'Generador de Cartas FIFA API está funcionando',
+    message: 'Generador XALDIGITAL API está funcionando',
     hasApiKey: !!process.env.GOOGLE_API_KEY
   });
 });
@@ -286,7 +286,7 @@ app.get('/download/:filename', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📱 Acceso desde la red local: http://${getLocalIP()}:${PORT}`);
-  console.log(`⚽ Generador de Cartas de Fútbol FIFA está listo`);
+  console.log(`✨ Generador de retratos XALDIGITAL está listo`);
   
   if (!process.env.GOOGLE_API_KEY) {
     console.warn('⚠️  ADVERTENCIA: No se encontró GOOGLE_API_KEY en el archivo .env');
