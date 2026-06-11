@@ -125,12 +125,12 @@ async function processImage(base64Image) {
       .png()
       .toBuffer();
 
-    // Logo centrado dentro de la franja
+    // Logo en la esquina izquierda de la franja
     const processedImage = await sharp(baseImage)
       .composite([{
         input: logoBuffer,
         top: Math.round((finalHeight - bandHeight) + (bandHeight - logoMeta.height) / 2),
-        left: Math.round((finalWidth - logoMeta.width) / 2)
+        left: 80
       }])
       .png()
       .toBuffer();

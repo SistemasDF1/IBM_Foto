@@ -327,12 +327,12 @@ body::before {
 }
 
 .download-btn {
-    background: var(--success);
-    color: white;
+    background: #ffd700;
+    color: #111;
 }
 
 .download-btn:hover {
-    background: #059669;
+    background: #ffe600;
     transform: translateY(-2px);
 }
 
