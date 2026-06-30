@@ -120,7 +120,7 @@ async function processImage(base64Image) {
       })
       .extend({
         bottom: bandHeight,
-        background: { r: 4, g: 7, b: 15, alpha: 1 }
+        background: { r: 0, g: 17, b: 65, alpha: 1 }
       })
       .png()
       .toBuffer();
@@ -170,7 +170,7 @@ app.get('/api/leads', (req, res) => {
   if (!fs.existsSync(leadsPath)) {
     return res.status(404).json({ error: 'Aún no hay registros' });
   }
-  res.download(leadsPath, 'leads_xaldigital.csv');
+  res.download(leadsPath, 'leads_ibm.csv');
 });
 
 // Ruta principal
@@ -225,7 +225,7 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
       ...robotParts
     ];
 
-    console.log('Generando retrato digital XALDIGITAL con Gemini 2.5...');
+    console.log('Generando foto con los robots IBM con Gemini 2.5...');
     
     // Generar la imagen
     const result = await model.generateContent(parts);
@@ -310,7 +310,7 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'Generador XALDIGITAL API está funcionando',
+    message: 'Generador IBM API está funcionando',
     hasApiKey: !!process.env.GOOGLE_API_KEY
   });
 });
@@ -330,7 +330,7 @@ app.get('/download/:filename', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📱 Acceso desde la red local: http://${getLocalIP()}:${PORT}`);
-  console.log(`✨ Generador de retratos XALDIGITAL está listo`);
+  console.log(`✨ Generador de fotos IBM está listo`);
   
   if (!process.env.GOOGLE_API_KEY) {
     console.warn('⚠️  ADVERTENCIA: No se encontró GOOGLE_API_KEY en el archivo .env');

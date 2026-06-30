@@ -129,7 +129,7 @@ async function generateImage() {
         return;
     }
 
-    // Construir el prompt estilo XALDIGITAL (retrato de código binario)
+    // Construir el prompt: la persona con los 4 robots IBM
     const nombre = window.nombreUsuario || 'Usuario';
 
     const prompt = `La PRIMERA imagen es la foto real de una persona; las otras CUATRO imágenes son 4 robots mascota (uno morado, uno verde, uno rosa y uno azul).
@@ -138,10 +138,10 @@ Crea una sola fotografía de grupo donde la persona aparece de pie en el centro,
 
 Reglas obligatorias:
 - Mantén el rostro de la persona realista y reconocible (rasgos, cabello, vello facial, lentes si los tiene). NO la conviertas en caricatura ni en robot.
-- Reproduce los 4 robots LO MÁS FIELES POSIBLE a las imágenes de referencia: mismas formas, mismos colores (morado, verde, rosa, azul), mismo estilo de ilustración plana y limpia. Deben verse como los personajes originales, no inventes robots distintos.
-- Aparecen los 4 robots completos y bien visibles, en escala coherente con la persona.
+- MUY IMPORTANTE: NO rediseñes, NO modifiques y NO reinterpretes a los robots. Cópialos EXACTAMENTE como en las imágenes de referencia: mismas formas, mismos colores, mismas caras, mismos detalles y el MISMO estilo de ilustración plana 2D (flat vector), NO los conviertas en robots 3D ni en otro estilo. Deben ser idénticos a las referencias, solo recórtalos y colócalos en la escena.
+- Aparecen los 4 robots completos y bien visibles (morado, verde, rosa, azul), en escala coherente con la persona, dos a cada lado.
 - Fondo azul corporativo estilo IBM con líneas y degradados azules suaves y luminosos, profesional y moderno.
-- Iluminación clara, composición vertical tipo póster, alta calidad, integración natural entre la persona (foto real) y los robots (ilustración).`;
+- Composición vertical tipo póster, alta calidad. La persona es una foto real y los robots son ilustraciones planas pegadas en la escena (estilo collage limpio), no los fusiones con la persona.`;
 
     promptInput.value = prompt;
 
@@ -180,7 +180,7 @@ Reglas obligatorias:
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         showToast('¡Imagen generada exitosamente! 🎉', 'success');
         
-        // Lanzar celebración con colores XALDIGITAL (amarillo/dorado)
+        // Lanzar celebración con colores IBM
         if (window.confetti) {
             window.confetti({
                 particleCount: 120,
