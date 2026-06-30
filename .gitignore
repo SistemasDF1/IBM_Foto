@@ -34,3 +34,6 @@ Thumbs.db
 
 # Datos de participantes
 leads.csv
+
+# Fotos privadas tomadas en el evento (no públicas)
+capturas/

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
         * {
             font-family: 'Everett', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -164,15 +165,71 @@
             box-shadow: 0 8px 32px rgba(15, 98, 254, 0.35);
         }
         
+        .video-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            line-height: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(15, 98, 254, 0.45);
+        }
         #cameraVideo {
             width: 100%;
             max-width: 800px;
             height: 820px;
             object-fit: cover;
             border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 50px rgba(15, 98, 254, 0.45);
+            display: block;
             background: #000;
+        }
+        /* Logo IBM | telcel: arriba al centro */
+        .filter-logo {
+            position: absolute;
+            top: 4%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: auto;
+            z-index: 5;
+            pointer-events: none;
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.5));
+        }
+        /* Robot del filtro (aleatorio) */
+        .filter-robot {
+            position: absolute;
+            bottom: 0;
+            height: 58%;
+            width: auto;
+            z-index: 6;
+            pointer-events: none;
+            filter: drop-shadow(0 6px 14px rgba(0,0,0,0.35));
+            transform-origin: bottom center;
+        }
+        .filter-robot.left  { left: 1%; }
+        .filter-robot.right { right: 1%; }
+        /* Animaciones por personaje */
+        .anim-wave   { animation: animWave 2.2s ease-in-out infinite; }
+        .anim-bounce { animation: animBounce 1.6s ease-in-out infinite; }
+        .anim-float  { animation: animFloat 3s ease-in-out infinite; }
+        .anim-wiggle { animation: animWiggle 2.4s ease-in-out infinite; }
+        @keyframes animWave {
+            0%,100% { transform: rotate(-2deg); }
+            50%     { transform: rotate(3deg); }
+        }
+        @keyframes animBounce {
+            0%,100% { transform: translateY(0); }
+            50%     { transform: translateY(-18px); }
+        }
+        @keyframes animFloat {
+            0%,100% { transform: translateY(0) scale(1); }
+            50%     { transform: translateY(-10px) scale(1.02); }
+        }
+        @keyframes animWiggle {
+            0%,100% { transform: rotate(0deg); }
+            25%     { transform: rotate(-3deg); }
+            75%     { transform: rotate(3deg); }
         }
         
         #captureBtn, #closeCameraBtn {
@@ -1270,11 +1327,17 @@
        
     </div>
 
-    <!-- Modal de cámara -->
+    <!-- Modal de cámara con filtro -->
 <div class="camera-modal" id="cameraModal">
     <div class="camera-content">
-        <video id="cameraVideo" autoplay playsinline></video>
-        <div id="countdown" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:8rem;color:white;font-weight:bold;text-shadow:0 0 20px rgba(0,0,0,0.8);display:none;pointer-events:none;z-index:10001;">3</div>
+        <div class="video-wrap" id="videoWrap">
+            <video id="cameraVideo" autoplay playsinline></video>
+            <!-- Logo IBM | telcel arriba al centro -->
+            <img id="filterLogo" class="filter-logo" src="CobrandIBM.png" alt="IBM | telcel">
+            <!-- Robot aleatorio (1 por foto) animado -->
+            <img id="filterRobot" class="filter-robot" src="" alt="">
+            <div id="countdown" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:8rem;color:white;font-weight:bold;text-shadow:0 0 20px rgba(0,0,0,0.8);display:none;pointer-events:none;z-index:10001;">3</div>
+        </div>
         <button id="captureBtn">Capturar foto</button>
         <button id="closeCameraBtn">Cerrar</button>
     </div>

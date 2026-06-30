@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 import QRCode from 'qrcode';
 import os from 'os';
+import mysql from 'mysql2/promise';
 
 dotenv.config();
 
@@ -47,9 +48,45 @@ const upload = multer({
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '20mb' })); // las fotos del filtro llegan como base64
 app.use(express.static('public'));
 app.use('/downloads', express.static('downloads'));
+
+// ====== Base de datos MySQL (privada, solo para nosotros) ======
+let dbPool = null;
+async function initDB() {
+  try {
+    dbPool = await mysql.createPool({
+      host: process.env.DB_HOST || 'localhost',
+      port: Number(process.env.DB_PORT) || 3306,
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_NAME || 'ibm_foto',
+      waitForConnections: true,
+      connectionLimit: 5,
+      queueLimit: 0
+    });
+    await dbPool.query(`
+      CREATE TABLE IF NOT EXISTS fotos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        robot VARCHAR(20),
+        mime VARCHAR(30) DEFAULT 'image/png',
+        imagen LONGBLOB,
+        creado_en DATETIME DEFAULT CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `);
+    console.log('🗄️  MySQL conectado y tabla "fotos" lista');
+  } catch (err) {
+    dbPool = null;
+    console.warn('⚠️  No se pudo conectar a MySQL:', err.message);
+    console.warn('    Las fotos se guardarán solo en la carpeta privada hasta que configures la conexión.');
+  }
+}
+initDB();
+
+// Carpeta privada de respaldo (NO se sirve públicamente, está en .gitignore)
+const capturasDir = path.join(__dirname, 'capturas');
+if (!fs.existsSync(capturasDir)) fs.mkdirSync(capturasDir, { recursive: true });
 
 // Inicializar Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
@@ -122,23 +159,28 @@ async function processImage(base64Image) {
       .png()
       .toBuffer();
 
-    // Pegar los 4 robots reales sobre la foto (2 a cada lado, alineados abajo)
+    // Pegar los 4 robots reales sobre la foto, DISPERSOS: 2 al extremo izq, 2 al der,
+    // dejando el centro libre para que se vea la persona. Con variacion de tamano (profundidad).
     // Orden de izquierda a derecha: azul, morado, rosa, verde
     const robotFiles = ['DIBM.png', 'AIBM.png', 'CIBM.png', 'BIBM.png'];
-    const robotHeight = Math.round(photoHeight * 0.30); // ~990px
-    // Centros horizontales (fracción del ancho) para repartirlos: 2 a la izq, 2 a la der
-    const centersFrac = [0.13, 0.33, 0.67, 0.87];
+    // Alto de cada robot como fraccion del alto de la foto (outer mas chicos = mas lejos)
+    const heightFrac = [0.24, 0.28, 0.28, 0.24];
+    // Centro horizontal de cada robot (fraccion del ancho): pegados a los extremos
+    const centersFrac = [0.09, 0.26, 0.74, 0.91];
+    // Desfase vertical: los de los extremos (mas chicos) un poco mas arriba = mas lejos
+    const bottomOffset = [-60, 0, 0, -60];
 
     const robotComposites = [];
     for (let i = 0; i < robotFiles.length; i++) {
+      const rH = Math.round(photoHeight * heightFrac[i]);
       const rBuf = await sharp(path.join(__dirname, 'public', robotFiles[i]))
-        .resize({ height: robotHeight, fit: 'inside' })
+        .resize({ height: rH, fit: 'inside' })
         .png()
         .toBuffer();
       const rMeta = await sharp(rBuf).metadata();
       let left = Math.round(finalWidth * centersFrac[i] - rMeta.width / 2);
       left = Math.max(0, Math.min(left, finalWidth - rMeta.width)); // clamp dentro del lienzo
-      const top = photoHeight - rMeta.height; // pegados al borde inferior de la foto
+      const top = photoHeight - rMeta.height + bottomOffset[i];
       robotComposites.push({ input: rBuf, top, left });
     }
 
@@ -325,6 +367,78 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
       error: 'Error al generar la imagen',
       details: error.message
     });
+  }
+});
+
+// ====== Guardar foto del filtro (privado) ======
+app.post('/api/save', async (req, res) => {
+  try {
+    const { image, robot } = req.body || {};
+    if (!image || !/^data:image\/\w+;base64,/.test(image)) {
+      return res.status(400).json({ error: 'Imagen inválida' });
+    }
+    const mime = image.substring(image.indexOf(':') + 1, image.indexOf(';'));
+    const base64 = image.replace(/^data:image\/\w+;base64,/, '');
+    const buffer = Buffer.from(base64, 'base64');
+
+    // Respaldo siempre en carpeta privada (por si falla la BD)
+    const filename = `foto_${Date.now()}.png`;
+    fs.writeFileSync(path.join(capturasDir, filename), buffer);
+
+    // Guardar en MySQL (best-effort)
+    let savedDB = false;
+    if (dbPool) {
+      try {
+        await dbPool.query(
+          'INSERT INTO fotos (robot, mime, imagen) VALUES (?, ?, ?)',
+          [robot || null, mime || 'image/png', buffer]
+        );
+        savedDB = true;
+      } catch (e) {
+        console.error('Error guardando en MySQL:', e.message);
+      }
+    }
+
+    res.json({ success: true, savedDB });
+  } catch (error) {
+    console.error('Error en /api/save:', error);
+    res.status(500).json({ error: 'No se pudo guardar la foto' });
+  }
+});
+
+// ====== Galería privada (protegida con LEADS_KEY) ======
+function checkKey(req, res) {
+  const key = process.env.LEADS_KEY;
+  if (!key || req.query.key !== key) {
+    res.status(403).json({ error: 'No autorizado' });
+    return false;
+  }
+  return true;
+}
+
+// Lista de fotos (JSON con id, robot, fecha)
+app.get('/api/fotos', async (req, res) => {
+  if (!checkKey(req, res)) return;
+  if (!dbPool) return res.status(503).json({ error: 'BD no disponible' });
+  try {
+    const [rows] = await dbPool.query('SELECT id, robot, creado_en FROM fotos ORDER BY id DESC');
+    res.json(rows);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Ver/descargar una foto por id
+app.get('/api/fotos/:id', async (req, res) => {
+  if (!checkKey(req, res)) return;
+  if (!dbPool) return res.status(503).json({ error: 'BD no disponible' });
+  try {
+    const [rows] = await dbPool.query('SELECT mime, imagen FROM fotos WHERE id = ?', [req.params.id]);
+    if (!rows.length) return res.status(404).json({ error: 'No encontrada' });
+    res.set('Content-Type', rows[0].mime || 'image/png');
+    res.send(rows[0].imagen);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
 });
 

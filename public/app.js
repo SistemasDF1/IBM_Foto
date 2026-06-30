@@ -16,8 +16,29 @@ const downloadBtn = document.getElementById('downloadBtn');
 const newBtn = document.getElementById('newBtn');
 const toast = document.getElementById('toast');
 const countdownEl = document.getElementById('countdown');
+const videoWrap = document.getElementById('videoWrap');
+const filterLogo = document.getElementById('filterLogo');
+const filterRobot = document.getElementById('filterRobot');
 
 let cameraStream = null;
+
+// Filtro: los 4 robots con su animación. Se elige UNO al azar por foto.
+const FILTER_ROBOTS = [
+    { src: 'DIBM.png', anim: 'anim-wave' },   // azul (saluda)
+    { src: 'AIBM.png', anim: 'anim-bounce' }, // morado (salta)
+    { src: 'CIBM.png', anim: 'anim-float' },  // rosa (flota)
+    { src: 'BIBM.png', anim: 'anim-wiggle' }  // verde (se mueve)
+];
+let currentRobot = null;
+let currentSide = 'right';
+
+// Elige robot y lado al azar y arma el overlay del filtro
+function setupFilter() {
+    currentRobot = FILTER_ROBOTS[Math.floor(Math.random() * FILTER_ROBOTS.length)];
+    currentSide = Math.random() < 0.5 ? 'left' : 'right';
+    filterRobot.src = currentRobot.src;
+    filterRobot.className = 'filter-robot ' + currentSide + ' ' + currentRobot.anim;
+}
 
 // Event Listeners
 generateBtn.addEventListener('click', generateImage);
@@ -37,6 +58,7 @@ cameraBtn.addEventListener('click', async () => {
         // 2. Intentar obtener cámara (preferencia: frontal)
         cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
         cameraVideo.srcObject = cameraStream;
+        setupFilter(); // elegir robot aleatorio para esta foto
     } catch (err) {
         console.error('Error de cámara:', err);
         
@@ -94,13 +116,44 @@ function startCountdown() {
     }, 1000);
 }
 
-// Captura la imagen y genera directamente (sin mostrar la foto original)
+// Captura la imagen aplicando el filtro (video + logo arriba + robot aleatorio)
 function captureImage() {
+    const boxW = videoWrap.clientWidth || cameraVideo.videoWidth;
+    const boxH = videoWrap.clientHeight || cameraVideo.videoHeight;
+
+    // Lienzo de salida en alta resolución, con la MISMA proporción que se ve en pantalla
+    const outW = 1080;
+    const outH = Math.round(outW * (boxH / boxW));
     const canvas = document.createElement('canvas');
-    canvas.width = cameraVideo.videoWidth;
-    canvas.height = cameraVideo.videoHeight;
+    canvas.width = outW;
+    canvas.height = outH;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
+
+    // 1) Video con recorte "cover" (igual que en la vista previa)
+    const vW = cameraVideo.videoWidth;
+    const vH = cameraVideo.videoHeight;
+    const scale = Math.max(outW / vW, outH / vH);
+    const sW = outW / scale;
+    const sH = outH / scale;
+    const sX = (vW - sW) / 2;
+    const sY = (vH - sH) / 2;
+    ctx.drawImage(cameraVideo, sX, sY, sW, sH, 0, 0, outW, outH);
+
+    // 2) Logo IBM | telcel arriba al centro (40% del ancho)
+    if (filterLogo.naturalWidth) {
+        const lw = outW * 0.40;
+        const lh = lw * (filterLogo.naturalHeight / filterLogo.naturalWidth);
+        ctx.drawImage(filterLogo, (outW - lw) / 2, outH * 0.04, lw, lh);
+    }
+
+    // 3) Robot aleatorio abajo, del lado elegido (58% del alto)
+    if (filterRobot.naturalWidth) {
+        const rh = outH * 0.58;
+        const rw = rh * (filterRobot.naturalWidth / filterRobot.naturalHeight);
+        const rx = currentSide === 'left' ? outW * 0.01 : outW - rw - outW * 0.01;
+        ctx.drawImage(filterRobot, rx, outH - rh, rw, rh);
+    }
+
     const dataUrl = canvas.toDataURL('image/png');
     imagePreview.src = dataUrl;
     previewContainer.style.display = 'none';
@@ -109,8 +162,45 @@ function captureImage() {
         cameraStream.getTracks().forEach(track => track.stop());
         cameraStream = null;
     }
-    // Generar automáticamente: el usuario solo ve la imagen creada por la IA
-    generateImage();
+
+    mostrarResultadoFiltro(dataUrl);
+}
+
+// Muestra el resultado del filtro y lo guarda en la base de datos (privado)
+async function mostrarResultadoFiltro(dataUrl) {
+    resultImage.src = dataUrl;
+    document.querySelector('.upload-section').style.display = 'none';
+    resultSection.style.display = 'block';
+    resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (window.confetti) {
+        window.confetti({
+            particleCount: 120,
+            spread: 80,
+            origin: { y: 0.6 },
+            colors: ['#0f62fe', '#8a3ffc', '#24a148', '#ee5396'],
+            shapes: ['circle', 'square'],
+            gravity: 0.6,
+            ticks: 300
+        });
+    }
+
+    // Guardar en el servidor (MySQL + respaldo privado)
+    try {
+        const resp = await fetch('/api/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: dataUrl, robot: currentRobot ? currentRobot.src : null })
+        });
+        if (resp.ok) {
+            showToast('¡Foto lista! 🎉', 'success');
+        } else {
+            showToast('Foto lista (no se pudo guardar en el servidor)', 'error');
+        }
+    } catch (e) {
+        console.error('Error guardando la foto:', e);
+        showToast('Foto lista (sin conexión al servidor)', 'error');
+    }
 }
 
 // Quitar imagen capturada
