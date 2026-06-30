@@ -104,8 +104,8 @@ async function processImage(base64Image) {
     const finalHeight = 3600;
     const bandHeight = 300;
 
-    // Logo XALDIGITAL blanco, redimensionado para caber en la franja
-    const logoPath = path.join(__dirname, 'public', 'xaldigital_white.png');
+    // Logo IBM blanco (cobrand), redimensionado para caber en la franja
+    const logoPath = path.join(__dirname, 'public', 'CobrandIBM.png');
     const logoBuffer = await sharp(logoPath)
       .resize({ height: 180, width: 1600, fit: 'inside' })
       .png()
@@ -204,7 +204,16 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
       model: "gemini-2.5-flash-image"
     });
 
-    // Preparar el contenido para la API
+    // Cargar los 4 robots IBM como imágenes de referencia
+    const robotFiles = ['AIBM.png', 'BIBM.png', 'CIBM.png', 'DIBM.png'];
+    const robotParts = robotFiles.map(file => ({
+      inlineData: {
+        mimeType: 'image/png',
+        data: fs.readFileSync(path.join(__dirname, 'public', file)).toString('base64')
+      }
+    }));
+
+    // Preparar el contenido para la API: prompt + foto del usuario + 4 robots de referencia
     const parts = [
       { text: prompt },
       {
@@ -212,7 +221,8 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
           mimeType: req.file.mimetype,
           data: base64Image
         }
-      }
+      },
+      ...robotParts
     ];
 
     console.log('Generando retrato digital XALDIGITAL con Gemini 2.5...');

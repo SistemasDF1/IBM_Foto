@@ -132,23 +132,16 @@ async function generateImage() {
     // Construir el prompt estilo XALDIGITAL (retrato de código binario)
     const nombre = window.nombreUsuario || 'Usuario';
 
-    const prompt = `Usa la foto que acabo de tomar como base principal.
-Mantén mi identidad facial realista y reconocible (ojos, rasgos, cabello, vello facial).
+    const prompt = `La PRIMERA imagen es la foto real de una persona; las otras CUATRO imágenes son 4 robots mascota (uno morado, uno verde, uno rosa y uno azul).
 
-Crea un retrato digital artístico tipo póster:
-el rostro debe estar formado por código binario brillante (números 1 y 0)
-y caracteres de datos pequeños en color dorado/amarillo luminoso,
-siguiendo los contornos y volúmenes reales de la cara.
-Los ojos deben permanecer realistas y visibles a través del código.
+Crea una sola fotografía de grupo donde la persona aparece de pie en el centro, acompañada por los 4 robots, dos a cada lado, en una pose divertida y amistosa (como una foto de evento).
 
-Un lado del rostro se desintegra y disuelve en partículas
-de datos y dígitos que flotan hacia el borde de la imagen.
-
-Fondo azul muy oscuro casi negro, con sutiles columnas de
-código cayendo estilo matrix, iluminación cinematográfica.
-
-Estilo póster tecnológico premium, alta calidad, ultra detallado,
-no caricatura, no anime.`;
+Reglas obligatorias:
+- Mantén el rostro de la persona realista y reconocible (rasgos, cabello, vello facial, lentes si los tiene). NO la conviertas en caricatura ni en robot.
+- Reproduce los 4 robots LO MÁS FIELES POSIBLE a las imágenes de referencia: mismas formas, mismos colores (morado, verde, rosa, azul), mismo estilo de ilustración plana y limpia. Deben verse como los personajes originales, no inventes robots distintos.
+- Aparecen los 4 robots completos y bien visibles, en escala coherente con la persona.
+- Fondo azul corporativo estilo IBM con líneas y degradados azules suaves y luminosos, profesional y moderno.
+- Iluminación clara, composición vertical tipo póster, alta calidad, integración natural entre la persona (foto real) y los robots (ilustración).`;
 
     promptInput.value = prompt;
 
@@ -193,7 +186,7 @@ no caricatura, no anime.`;
                 particleCount: 120,
                 spread: 80,
                 origin: { y: 0.6 },
-                colors: ['#FFD700', '#FFE600', '#FFFFFF', '#000000'],
+                colors: ['#0f62fe', '#8a3ffc', '#24a148', '#ee5396'],
                 shapes: ['circle', 'square'],
                 gravity: 0.6,
                 ticks: 300
@@ -226,7 +219,7 @@ function downloadImage() {
     const minuto = String(fecha.getMinutes()).padStart(2, '0');
     const segundo = String(fecha.getSeconds()).padStart(2, '0');
     const nombreLimpio = nombre.replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ]/g, '_');
-    const nombreArchivo = `XALDIGITAL_${nombreLimpio}_${dia}-${mes}-${año}_${hora}-${minuto}-${segundo}.png`;
+    const nombreArchivo = `IBM_${nombreLimpio}_${dia}-${mes}-${año}_${hora}-${minuto}-${segundo}.png`;
     
     const link = document.createElement('a');
     link.href = resultImage.src;

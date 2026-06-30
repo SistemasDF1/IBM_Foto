@@ -125,7 +125,7 @@ body::before {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 275px;
+    margin-top: 0;
 }
 
 .upload-area:hover {

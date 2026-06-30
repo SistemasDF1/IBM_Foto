@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XALDIGITAL - Generador de Imágenes</title>
+    <title>IBM - Foto con los robots</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Everett:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,19 +14,15 @@
         * {
             font-family: 'Everett', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-        /* Fondo XALDIGITAL: azul muy oscuro con resplandor amarillo sutil */
+        /* Fondo IBM: imagen azul degradada */
         body {
-            background:
-                radial-gradient(ellipse at 80% 10%, rgba(255, 214, 0, 0.08), transparent 50%),
-                radial-gradient(ellipse at 15% 85%, rgba(255, 214, 0, 0.05), transparent 45%),
-                linear-gradient(160deg, #060a14 0%, #04070f 60%, #02040a 100%);
-            background-attachment: fixed;
+            background: #0530ad url('FondoIBM.png') center center / cover no-repeat fixed;
             min-height: 100vh;
         }
         /* Estilos para botón de cámara */
         .camera-btn {
-            background: linear-gradient(135deg, #ffe600 0%, #ffc400 100%);
-            color: #111;
+            background: linear-gradient(135deg, #0f62fe 0%, #0043ce 100%);
+            color: #fff;
             border: none;
             padding: 16px 32px;
             border-radius: 50px;
@@ -47,8 +43,8 @@
         
         .camera-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(255, 214, 0, 0.4);
-            background: #ffd700;
+            box-shadow: 0 12px 35px rgba(15, 98, 254, 0.45);
+            background: #0f62fe;
         }
         
         .camera-btn:active {
@@ -180,8 +176,8 @@
         }
         
         #captureBtn, #closeCameraBtn {
-            background: #ffd700;
-            color: #111;
+            background: #0f62fe;
+            color: #fff;
             border: none;
             padding: 12px 24px;
             border-radius: 25px;
@@ -190,9 +186,9 @@
             margin: 10px 15px;
             transition: all 0.3s ease;
         }
-        
+
         #captureBtn:hover, #closeCameraBtn:hover {
-            background: #ffe600;
+            background: #0043ce;
             transform: translateY(-2px);
         }
         
@@ -219,11 +215,11 @@
 }
 
 .loader::before {
- background-color: #ffd700;
+ background-color: #0f62fe;
 }
 
 .loader::after {
- background-color: #1a1a1a;
+ background-color: #ffffff;
  animation-delay: .5s;
 }
 
@@ -249,20 +245,22 @@
         /*  loader    */
         .logo-corner {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 24px;
+            left: 28px;
             transform: none;
             z-index: 1000;
             text-align: left;
             pointer-events: auto;
         }
         .logo-corner img {
-            max-width: 300px;
-            width: 100%;
-            height: auto;
+            width: auto;
+            height: 48px;
+            max-width: 80vw;
             opacity: 0.95;
             transition: opacity 0.3s ease, transform 0.2s ease;
-            display: inline-block;
+            display: block;
+            object-fit: contain;
+            object-position: left center;
         }
         .logo-corner img:hover {
             opacity: 1;
@@ -270,6 +268,36 @@
         }
         .logo-corner .logo-dark { display: none; }
         .logo-corner .logo-light { display: inline-block; }
+        /* Los 4 robots IBM, esquina inferior derecha */
+        .robots-corner {
+            position: fixed;
+            bottom: 0;
+            left: 24px;
+            z-index: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: flex-end;
+            gap: 0;
+        }
+        .robots-corner img {
+            height: 200px;
+            width: auto;
+            margin-left: -18px;
+            filter: drop-shadow(0 6px 14px rgba(0,0,0,0.25));
+        }
+        @media (max-width: 768px) {
+            .robots-corner {
+                left: 0;
+                right: 0;
+                width: 100%;
+                justify-content: center;
+                gap: 0;
+            }
+            .robots-corner img { height: 100px; margin-left: -6px; }
+        }
+        @media (max-width: 480px) {
+            .robots-corner img { height: 74px; margin-left: -4px; }
+        }
         @media (prefers-color-scheme: dark) {
             .logo-corner .logo-dark { display: inline-block; }
             .logo-corner .logo-light { display: none; }
@@ -363,12 +391,14 @@
 
         /* Media Queries para Responsividad */
         @media (max-width: 768px) {
-            .logo-corner img {
-                width: 200px;
-                top: 10px;
-                left: 10px;
+            .logo-corner {
+                top: 50px;
+                left: 20px;
             }
-            
+            .logo-corner img {
+                height: 36px;
+            }
+
             .title {
                 font-size: 1.8rem !important;
                 margin-bottom: 40px !important;
@@ -516,15 +546,15 @@
         @media (max-width: 480px) {
             .logo-corner {
                 position: absolute !important;
-                top: 10px !important;
+                top: 40px !important;
                 left: 50% !important;
                 transform: translateX(-50%) !important;
-                width: 100% !important;
+                width: auto !important;
                 text-align: center !important;
             }
-            
+
             .logo-corner img {
-                width: 170px;
+                height: 32px;
             }
 
             .title {
@@ -669,7 +699,7 @@
         
         @media (min-width: 769px) and (max-width: 1024px) {
             .logo-corner img {
-                width: 250px;
+                height: 44px;
             }
             
             .avatars-container {
@@ -864,7 +894,7 @@
                         const charY = col.y - t * fontSize;
                         if (charY < -fontSize) break;
                         const fade = (1 - t / 14) * col.alpha;
-                        ctx.fillStyle = 'rgba(255, 214, 0, ' + fade.toFixed(3) + ')';
+                        ctx.fillStyle = 'rgba(255, 255, 255, ' + fade.toFixed(3) + ')';
                         ctx.fillText(Math.random() < 0.5 ? '0' : '1', col.x, charY);
                     }
                     col.y += col.speed * fontSize * 0.18;
@@ -884,8 +914,16 @@
     </script>
 
     <div class="logo-corner">
-        <img class="logo-light" src="xaldigital_white.png" alt="XALDIGITAL">
-        <img class="logo-dark" src="xaldigital_white.png" alt="XALDIGITAL">
+        <img class="logo-light" src="CobrandIBM.png" alt="IBM">
+        <img class="logo-dark" src="CobrandIBM.png" alt="IBM">
+    </div>
+
+    <!-- Los 4 robots IBM en la esquina inferior derecha (decoración) -->
+    <div class="robots-corner">
+        <img src="DIBM.png" alt="">
+        <img src="CIBM.png" alt="">
+        <img src="BIBM.png" alt="">
+        <img src="AIBM.png" alt="">
     </div>
 
 
@@ -1146,8 +1184,8 @@
             }, 100);
         }
     </script>
-    <div class="container" id="generatorContainer" style="display:none;">
-        <main class="main-content" style="position: relative; margin: 32px auto; text-align: center; background: linear-gradient(135deg, rgba(255, 214, 0, 0.10), rgba(8, 12, 22, 0.75)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); padding: 20px; border-radius: 20px; box-shadow: 0 8px 32px rgba(255, 214, 0, 0.22); width: 90%; max-width: 500px; box-sizing: border-box;">
+    <div class="container" id="generatorContainer" style="display:none; padding-top: 25vh;">
+        <main class="main-content" style="position: relative; margin: 0 auto 32px; text-align: center; background: linear-gradient(135deg, rgba(255, 214, 0, 0.10), rgba(8, 12, 22, 0.75)); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); padding: 20px; border-radius: 20px; box-shadow: 0 8px 32px rgba(255, 214, 0, 0.22); width: 90%; max-width: 500px; box-sizing: border-box;">
             <div class="upload-section">
                 <div class="card" style="background: transparent; box-shadow: none; padding: 0;">
                     
