@@ -112,12 +112,43 @@ async function processImage(base64Image) {
       .toBuffer();
     const logoMeta = await sharp(logoBuffer).metadata();
 
-    // Imagen principal + franja blanca inferior
-    const baseImage = await sharp(imageBuffer)
-      .resize(finalWidth, finalHeight - bandHeight, {
+    // Área de la foto (sin la franja inferior)
+    const photoHeight = finalHeight - bandHeight; // 3300
+    const photoArea = await sharp(imageBuffer)
+      .resize(finalWidth, photoHeight, {
         fit: 'cover',
         position: 'center'
       })
+      .png()
+      .toBuffer();
+
+    // Pegar los 4 robots reales sobre la foto (2 a cada lado, alineados abajo)
+    // Orden de izquierda a derecha: azul, morado, rosa, verde
+    const robotFiles = ['DIBM.png', 'AIBM.png', 'CIBM.png', 'BIBM.png'];
+    const robotHeight = Math.round(photoHeight * 0.30); // ~990px
+    // Centros horizontales (fracción del ancho) para repartirlos: 2 a la izq, 2 a la der
+    const centersFrac = [0.13, 0.33, 0.67, 0.87];
+
+    const robotComposites = [];
+    for (let i = 0; i < robotFiles.length; i++) {
+      const rBuf = await sharp(path.join(__dirname, 'public', robotFiles[i]))
+        .resize({ height: robotHeight, fit: 'inside' })
+        .png()
+        .toBuffer();
+      const rMeta = await sharp(rBuf).metadata();
+      let left = Math.round(finalWidth * centersFrac[i] - rMeta.width / 2);
+      left = Math.max(0, Math.min(left, finalWidth - rMeta.width)); // clamp dentro del lienzo
+      const top = photoHeight - rMeta.height; // pegados al borde inferior de la foto
+      robotComposites.push({ input: rBuf, top, left });
+    }
+
+    const photoWithRobots = await sharp(photoArea)
+      .composite(robotComposites)
+      .png()
+      .toBuffer();
+
+    // Agregar la franja azul marino inferior
+    const baseImage = await sharp(photoWithRobots)
       .extend({
         bottom: bandHeight,
         background: { r: 0, g: 17, b: 65, alpha: 1 }
@@ -204,16 +235,8 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
       model: "gemini-2.5-flash-image"
     });
 
-    // Cargar los 4 robots IBM como imágenes de referencia
-    const robotFiles = ['AIBM.png', 'BIBM.png', 'CIBM.png', 'DIBM.png'];
-    const robotParts = robotFiles.map(file => ({
-      inlineData: {
-        mimeType: 'image/png',
-        data: fs.readFileSync(path.join(__dirname, 'public', file)).toString('base64')
-      }
-    }));
-
-    // Preparar el contenido para la API: prompt + foto del usuario + 4 robots de referencia
+    // Preparar el contenido para la API: solo prompt + foto del usuario.
+    // Los robots NO se mandan a la IA: se pegan por código para que queden idénticos.
     const parts = [
       { text: prompt },
       {
@@ -221,8 +244,7 @@ app.post('/api/generate', upload.single('image'), async (req, res) => {
           mimeType: req.file.mimetype,
           data: base64Image
         }
-      },
-      ...robotParts
+      }
     ];
 
     console.log('Generando foto con los robots IBM con Gemini 2.5...');

@@ -132,16 +132,16 @@ async function generateImage() {
     // Construir el prompt: la persona con los 4 robots IBM
     const nombre = window.nombreUsuario || 'Usuario';
 
-    const prompt = `La PRIMERA imagen es la foto real de una persona; las otras CUATRO imágenes son 4 robots mascota (uno morado, uno verde, uno rosa y uno azul).
+    const prompt = `Esta es la foto real de una persona.
 
-Crea una sola fotografía de grupo donde la persona aparece de pie en el centro, acompañada por los 4 robots, dos a cada lado, en una pose divertida y amistosa (como una foto de evento).
+Tu única tarea es CAMBIAR EL FONDO por un fondo de estudio azul corporativo estilo IBM: degradado azul limpio (de azul medio luminoso a azul marino), profesional y moderno, con sutiles ondas/líneas tecnológicas suaves y un ligero viñeteado. Tipo retrato corporativo de estudio.
 
-Reglas obligatorias:
-- Mantén el rostro de la persona realista y reconocible (rasgos, cabello, vello facial, lentes si los tiene). NO la conviertas en caricatura ni en robot.
-- MUY IMPORTANTE: NO rediseñes, NO modifiques y NO reinterpretes a los robots. Cópialos EXACTAMENTE como en las imágenes de referencia: mismas formas, mismos colores, mismas caras, mismos detalles y el MISMO estilo de ilustración plana 2D (flat vector), NO los conviertas en robots 3D ni en otro estilo. Deben ser idénticos a las referencias, solo recórtalos y colócalos en la escena.
-- Aparecen los 4 robots completos y bien visibles (morado, verde, rosa, azul), en escala coherente con la persona, dos a cada lado.
-- Fondo azul corporativo estilo IBM con líneas y degradados azules suaves y luminosos, profesional y moderno.
-- Composición vertical tipo póster, alta calidad. La persona es una foto real y los robots son ilustraciones planas pegadas en la escena (estilo collage limpio), no los fusiones con la persona.`;
+REGLAS ESTRICTAS:
+- NO modifiques a la persona. Conserva EXACTAMENTE su rostro, rasgos, expresión, tono de piel, cabello, barba/vello facial, lentes y ropa. La cara debe quedar IDÉNTICA a la foto original; no la regeneres, no la suavices, no la embellezcas, no cambies su edad ni su peinado.
+- Reemplaza SOLO el fondo detrás de la persona; recórtala con bordes limpios (incluido el cabello) y déjala intacta.
+- Ilumina a la persona de forma natural y favorecedora, manteniendo sus colores reales (que NO quede lavada ni pálida ni con tinte azul en la piel). Buen contraste y nitidez.
+- Encuadre vertical tipo retrato: cabeza y hombros de la persona en la parte SUPERIOR-CENTRAL, ocupando aproximadamente los dos tercios superiores, dejando libre el tercio inferior.
+- Resultado fotográfico realista, profesional, alta calidad.`;
 
     promptInput.value = prompt;
 
